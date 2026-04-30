@@ -108,6 +108,13 @@
         background: #333;
       }
 
+      .save-status {
+        min-height: 18px;
+        margin: 10px 0 0;
+        color: #555;
+        font-size: 12px;
+      }
+
       .menu-list {
         flex: 1;
         min-height: 0;
@@ -287,9 +294,11 @@
 
         <div class="actions">
           <button class="primary" onclick="addItem()">Thêm</button>
+          <button onclick="saveBill()">Lưu bill</button>
           <button onclick="printBill()">In</button>
           <button onclick="resetBill()">Reset</button>
         </div>
+        <p class="save-status" id="saveStatus"></p>
       </section>
 
       <section class="quick-panel" aria-label="Chọn nhanh món">
@@ -329,6 +338,7 @@
             <tr>
               <th>Tên</th>
               <th>SL</th>
+              <th class="right">Đ.Giá</th>
               <th class="right">Tiền</th>
             </tr>
           </table>
@@ -343,6 +353,8 @@
     </main>
 
     <script>
+      const APPS_SCRIPT_URL = "";
+
       let total = 0;
       let items = {};
 
@@ -494,6 +506,7 @@
           <tr>
             <th>Tên</th>
             <th>SL</th>
+            <th class="right">Đ.Giá</th>
             <th class="right">Tiền</th>
           </tr>
         `;
@@ -509,6 +522,7 @@
           row.innerHTML = `
             <td>${name}</td>
             <td>${item.qty}</td>
+            <td class="right">${item.price.toLocaleString()}</td>
             <td class="right">${itemTotal.toLocaleString()}</td>
           `;
         }
@@ -523,10 +537,60 @@
         window.print();
       }
 
+      function getBillPayload() {
+        return {
+          createdAt: new Date().toISOString(),
+          tableNo: document.getElementById("tableNo").innerText,
+          timeIn: document.getElementById("timeIn").innerText,
+          timeOut: document.getElementById("timeOut").innerText,
+          total,
+          items: Object.entries(items).map(([name, item]) => ({
+            name,
+            qty: item.qty,
+            price: item.price,
+            amount: item.qty * item.price,
+          })),
+        };
+      }
+
+      function setSaveStatus(message) {
+        document.getElementById("saveStatus").innerText = message;
+      }
+
+      async function saveBill() {
+        if (!APPS_SCRIPT_URL) {
+          setSaveStatus("Chưa cấu hình Google Apps Script URL.");
+          return;
+        }
+
+        if (!Object.keys(items).length) {
+          setSaveStatus("Bill chưa có món để lưu.");
+          return;
+        }
+
+        setSaveStatus("Đang lưu bill...");
+
+        try {
+          await fetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain",
+            },
+            body: JSON.stringify(getBillPayload()),
+          });
+
+          setSaveStatus("Đã gửi bill lên Google Sheet.");
+        } catch (error) {
+          setSaveStatus("Không lưu được bill. Kiểm tra URL hoặc mạng.");
+        }
+      }
+
       function resetBill() {
         items = {};
         total = 0;
         render();
+        setSaveStatus("");
       }
 
       function setTable() {

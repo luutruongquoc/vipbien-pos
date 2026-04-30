@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POS Mini</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #f4f4f4;
+        color: #111;
+        font-family: monospace;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .pos-layout {
+        display: grid;
+        grid-template-columns: minmax(240px, 1fr) minmax(320px, 1.2fr) minmax(
+            260px,
+            1fr
+          );
+        gap: 24px;
+        min-height: 100vh;
+        padding: 24px;
+      }
+
+      /* ===== POS UI ===== */
+      .controls,
+      .quick-panel {
+        align-self: start;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .controls h3,
+      .controls h4,
+      .quick-panel h4 {
+        margin: 0 0 10px;
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .controls input,
+      .quick-panel input {
+        width: 100%;
+        margin: 4px 0;
+        padding: 9px 10px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
+      }
+
+      .controls button,
+      .quick-panel button {
+        width: 100%;
+        margin: 4px 0;
+        padding: 10px;
+        border: 1px solid #222;
+        border-radius: 6px;
+        background: #fff;
+      }
+
+      .controls button:hover,
+      .quick-panel button:hover {
+        background: #eee;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .actions button {
+        margin: 0;
+      }
+
+      .actions .primary {
+        grid-column: 1 / -1;
+        background: #111;
+        color: #fff;
+      }
+
+      .actions .primary:hover {
+        background: #333;
+      }
+
+      .menu-list {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .quick-panel {
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 48px);
+      }
+
+      .menu-search {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #fff;
+        padding-bottom: 10px;
+      }
+
+      .menu-item {
+        display: grid;
+        grid-template-columns: 44px 1fr 44px;
+        gap: 8px;
+        align-items: center;
+        margin: 6px 0;
+      }
+
+      .menu-item button {
+        margin: 0;
+      }
+
+      .menu-name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .empty-menu {
+        margin: 12px 0 0;
+        color: #666;
+        font-size: 12px;
+        text-align: center;
+      }
+
+      /* ===== BILL VIEW ===== */
+      .bill-panel {
+        align-self: start;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+        padding: 16px 8px;
+        background: #e9e9e9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      .bill {
+        width: 58mm;
+        min-height: 160mm;
+        background: #fff;
+        padding: 8px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      .bill h2,
+      .bill p {
+        text-align: center;
+        margin: 2px 0;
+      }
+
+      .bill h2 {
+        font-size: 18px;
+      }
+
+      .bill p {
+        font-size: 12px;
+      }
+
+      .info {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 2px 0;
+        vertical-align: top;
+      }
+
+      th {
+        text-align: left;
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      hr {
+        border: 0;
+        border-top: 1px dashed #000;
+      }
+
+      .total {
+        text-align: right;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      @media (max-width: 760px) {
+        .pos-layout {
+          grid-template-columns: 1fr;
+          padding: 12px;
+        }
+
+        .bill-panel {
+          justify-content: center;
+        }
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        body * {
+          visibility: hidden;
+        }
+
+        .bill,
+        .bill * {
+          visibility: visible;
+        }
+
+        .bill {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 58mm;
+          min-height: 0;
+          padding: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="pos-layout">
+      <section class="controls" aria-label="Nhập liệu bán hàng">
+        <div class="form-group">
+          <h3>Nhập liệu</h3>
+          <div class="table-row">
+            <button onclick="setTable()">Số bàn</button>
+            <input id="tableInput" placeholder="Nhập số bàn" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <h4>Thêm tay</h4>
+          <input id="name" placeholder="Tên hàng" />
+          <input id="qty" type="number" placeholder="SL" />
+          <input id="price" type="number" placeholder="Giá" />
+        </div>
+
+        <div class="actions">
+          <button class="primary" onclick="addItem()">Thêm</button>
+          <button onclick="printBill()">In</button>
+          <button onclick="resetBill()">Reset</button>
+        </div>
+      </section>
+
+      <section class="quick-panel" aria-label="Chọn nhanh món">
+        <div class="menu-search">
+          <h4>Chọn nhanh</h4>
+          <input
+            id="menuSearch"
+            placeholder="Tìm món"
+            oninput="renderQuickMenu()"
+          />
+        </div>
+
+        <div class="menu-list" id="quickMenuList"></div>
+      </section>
+
+      <section class="bill-panel" aria-label="Xem trước hóa đơn">
+        <div class="bill" id="bill">
+          <h2>VIP BIỂN</h2>
+          <p>21 Nguyễn Văn Linh, phường Tân Thuận Tây, Q7, TP.HCM</p>
+          <p>ĐT: 0902431291</p>
+
+          <hr />
+
+          <div class="info">
+            <span>Bàn: <span id="tableNo">VIP 4</span></span>
+            <span>Phiếu tính tiền</span>
+          </div>
+
+          <div class="info">
+            <span id="timeIn"></span>
+            <span id="timeOut"></span>
+          </div>
+
+          <hr />
+
+          <table id="items">
+            <tr>
+              <th>Tên</th>
+              <th>SL</th>
+              <th class="right">Tiền</th>
+            </tr>
+          </table>
+
+          <hr />
+
+          <div class="total" id="total">TỔNG: 0</div>
+
+          <p>Cảm ơn quý khách!</p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let total = 0;
+      let items = {};
+
+      const quickMenuItems = [
+        { name: "Tiger", price: 21000 },
+        { name: "Heineken", price: 21000 },
+        { name: "Saigon Special", price: 20000 },
+        { name: "Bia 333", price: 18000 },
+        { name: "Bia Sài Gòn", price: 18000 },
+        { name: "Strongbow", price: 25000 },
+        { name: "Nước suối", price: 10000 },
+        { name: "Coca", price: 15000 },
+        { name: "Pepsi", price: 15000 },
+        { name: "7 Up", price: 15000 },
+        { name: "Sting", price: 15000 },
+        { name: "Red Bull", price: 20000 },
+        { name: "Trà đá", price: 5000 },
+        { name: "Trà tắc", price: 15000 },
+        { name: "Nước cam", price: 25000 },
+        { name: "Nước chanh", price: 20000 },
+        { name: "Cà phê đen", price: 20000 },
+        { name: "Cà phê sữa", price: 25000 },
+        { name: "Khăn lạnh", price: 3000 },
+        { name: "Đậu phộng", price: 20000 },
+        { name: "Trái cây", price: 100000 },
+        { name: "Khô gà", price: 60000 },
+        { name: "Khô bò", price: 80000 },
+        { name: "Mực khô", price: 120000 },
+        { name: "Cá viên chiên", price: 50000 },
+        { name: "Bò viên chiên", price: 50000 },
+        { name: "Khoai tây chiên", price: 45000 },
+        { name: "Xúc xích", price: 35000 },
+        { name: "Nem chua rán", price: 60000 },
+        { name: "Chả giò", price: 60000 },
+        { name: "Gỏi bò", price: 120000 },
+        { name: "Gỏi hải sản", price: 150000 },
+        { name: "Rau muống xào", price: 70000 },
+        { name: "Mì xào bò", price: 90000 },
+        { name: "Mì xào hải sản", price: 110000 },
+        { name: "Cơm chiên trứng", price: 70000 },
+        { name: "Cơm chiên hải sản", price: 110000 },
+        { name: "Lẩu thái", price: 250000 },
+        { name: "Lẩu hải sản", price: 280000 },
+        { name: "Tôm nướng", price: 180000 },
+        { name: "Mực nướng", price: 160000 },
+        { name: "Bạch tuộc nướng", price: 170000 },
+        { name: "Nghêu hấp", price: 120000 },
+        { name: "Sò lông nướng", price: 140000 },
+        { name: "Ốc hương rang muối", price: 180000 },
+        { name: "Ốc móng tay xào", price: 150000 },
+        { name: "Cánh gà chiên", price: 90000 },
+        { name: "Sườn nướng", price: 140000 },
+        { name: "Bò lúc lắc", price: 150000 },
+        { name: "Phí phục vụ", price: 20000 },
+      ];
+
+      function renderQuickMenu() {
+        const list = document.getElementById("quickMenuList");
+        const search = document
+          .getElementById("menuSearch")
+          .value.trim()
+          .toLowerCase();
+
+        list.innerHTML = "";
+
+        const filteredItems = quickMenuItems.filter((item) =>
+          item.name.toLowerCase().includes(search),
+        );
+
+        if (!filteredItems.length) {
+          list.innerHTML = '<p class="empty-menu">Không có món phù hợp</p>';
+          return;
+        }
+
+        filteredItems.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "menu-item";
+
+          const minusButton = document.createElement("button");
+          minusButton.type = "button";
+          minusButton.textContent = "-";
+          minusButton.addEventListener("click", () => removeQuick(item.name));
+
+          const nameButton = document.createElement("button");
+          nameButton.type = "button";
+          nameButton.className = "menu-name";
+          nameButton.textContent = item.name;
+          nameButton.title = item.price.toLocaleString();
+          nameButton.addEventListener("click", () =>
+            addQuick(item.name, item.price),
+          );
+
+          const plusButton = document.createElement("button");
+          plusButton.type = "button";
+          plusButton.textContent = "+";
+          plusButton.addEventListener("click", () =>
+            addQuick(item.name, item.price),
+          );
+
+          row.append(minusButton, nameButton, plusButton);
+          list.appendChild(row);
+        });
+      }
+
+      function addQuick(name, price) {
+        addItem(name, 1, price);
+      }
+
+      function removeQuick(name) {
+        if (!items[name]) return;
+
+        items[name].qty -= 1;
+
+        if (items[name].qty <= 0) {
+          delete items[name];
+        }
+
+        render();
+      }
+
+      function addItem(nameInput, qtyInput, priceInput) {
+        const isManual = !nameInput;
+        const name = nameInput || document.getElementById("name").value.trim();
+        const qty = qtyInput || parseInt(document.getElementById("qty").value);
+        const price =
+          priceInput || parseInt(document.getElementById("price").value);
+
+        if (!name || !qty || !price) return;
+
+        if (items[name]) {
+          items[name].qty += qty;
+        } else {
+          items[name] = { qty, price };
+        }
+
+        render();
+
+        if (isManual) {
+          document.getElementById("name").value = "";
+          document.getElementById("qty").value = "";
+          document.getElementById("price").value = "";
+          document.getElementById("name").focus();
+        }
+      }
+
+      function render() {
+        const table = document.getElementById("items");
+        table.innerHTML = `
+          <tr>
+            <th>Tên</th>
+            <th>SL</th>
+            <th class="right">Tiền</th>
+          </tr>
+        `;
+
+        total = 0;
+
+        for (let name in items) {
+          const item = items[name];
+          const itemTotal = item.qty * item.price;
+          total += itemTotal;
+
+          const row = table.insertRow();
+          row.innerHTML = `
+            <td>${name}</td>
+            <td>${item.qty}</td>
+            <td class="right">${itemTotal.toLocaleString()}</td>
+          `;
+        }
+
+        document.getElementById("total").innerText =
+          "TỔNG: " + total.toLocaleString();
+      }
+
+      function printBill() {
+        document.getElementById("timeOut").innerText =
+          "Giờ in: " + new Date().toLocaleTimeString();
+        window.print();
+      }
+
+      function resetBill() {
+        items = {};
+        total = 0;
+        render();
+      }
+
+      function setTable() {
+        const t = document.getElementById("tableInput").value.trim();
+        if (!t) return;
+
+        document.getElementById("tableNo").innerText = t;
+      }
+
+      document.getElementById("timeIn").innerText =
+        "Giờ vào: " + new Date().toLocaleTimeString();
+
+      renderQuickMenu();
+    </script>
+  </body>
+</html>

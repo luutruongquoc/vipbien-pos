@@ -470,7 +470,9 @@
             <input id="price" type="number" placeholder="Đơn giá" />
             <input id="qty" type="number" placeholder="SL" />
           </div>
-          <button class="primary" type="button" onclick="addItem()">Thêm</button>
+          <button class="primary" type="button" onclick="addItem()">
+            Thêm
+          </button>
         </div>
       </section>
 
@@ -484,7 +486,7 @@
         <div class="bill-panel">
           <div class="bill" id="bill">
             <h2>VIP BIỂN</h2>
-            <p>21 Nguyễn Văn Linh, phường Tân Thuận Tây, Q7, TP.HCM</p>
+            <p>Đ/C: 19 Nguyễn Văn Linh, phường Tân Thuận, TP.Hồ Chí Minh</p>
             <p>ĐT: 0902431291</p>
 
             <hr />
@@ -520,14 +522,16 @@
 
             <div class="total" id="total">TỔNG: 0</div>
 
-            <p>Cảm ơn quý khách!</p>
+            <p>
+              <b><i>Cảm ơn quý khách và hẹn gặp lại!</i></b>
+            </p>
           </div>
         </div>
 
         <div class="bill-actions">
           <div class="actions">
-            <button type="button" onclick="saveBill()">Lưu bill</button>
-            <button type="button" onclick="printBill()">In</button>
+            <button type="button" onclick="cancelBill()">Hủy</button>
+            <button type="button" onclick="saveAndPrintBill()">In</button>
           </div>
           <p class="save-status" id="saveStatus"></p>
         </div>
@@ -543,1334 +547,1334 @@
 
       const quickMenuItems = [
         {
-                "name": "BIA TURBORG",
-                "price": 20000
+          name: "BIA TURBORG",
+          price: 20000,
         },
         {
-                "name": "bia casberg",
-                "price": 24000
+          name: "bia casberg",
+          price: 24000,
         },
         {
-                "name": "combo lai rai",
-                "price": 169000
+          name: "combo lai rai",
+          price: 169000,
         },
         {
-                "name": "Mực trứng hấp gừng",
-                "price": 139000
+          name: "Mực trứng hấp gừng",
+          price: 139000,
         },
         {
-                "name": "Sò huyết rang me",
-                "price": 129000
+          name: "Sò huyết rang me",
+          price: 129000,
         },
         {
-                "name": "Sò huyết rang muối",
-                "price": 129000
+          name: "Sò huyết rang muối",
+          price: 129000,
         },
         {
-                "name": "Ốc mỡ xào bơ cay",
-                "price": 129000
+          name: "Ốc mỡ xào bơ cay",
+          price: 129000,
         },
         {
-                "name": "Ốc mỡ cháy tỏi",
-                "price": 129000
+          name: "Ốc mỡ cháy tỏi",
+          price: 129000,
         },
         {
-                "name": "Ốc mỡ rang me",
-                "price": 129000
+          name: "Ốc mỡ rang me",
+          price: 129000,
         },
         {
-                "name": "Sò lông xào rau muống",
-                "price": 99000
+          name: "Sò lông xào rau muống",
+          price: 99000,
         },
         {
-                "name": "Ốc bươu xào sa tế",
-                "price": 99000
+          name: "Ốc bươu xào sa tế",
+          price: 99000,
         },
         {
-                "name": "Ốc bươu hấp thái",
-                "price": 99000
+          name: "Ốc bươu hấp thái",
+          price: 99000,
         },
         {
-                "name": "Trứng vịt lộn rang me",
-                "price": 12000
+          name: "Trứng vịt lộn rang me",
+          price: 12000,
         },
         {
-                "name": "Trứng vịt lộn luộc",
-                "price": 10000
+          name: "Trứng vịt lộn luộc",
+          price: 10000,
         },
         {
-                "name": "Ốc cà na rang muối",
-                "price": 99000
+          name: "Ốc cà na rang muối",
+          price: 99000,
         },
         {
-                "name": "Ốc cà na rang me",
-                "price": 99000
+          name: "Ốc cà na rang me",
+          price: 99000,
         },
         {
-                "name": "Ốc cà na hấp sả",
-                "price": 99000
+          name: "Ốc cà na hấp sả",
+          price: 99000,
         },
         {
-                "name": "Càng ghẹ cháy tỏi",
-                "price": 129000
+          name: "Càng ghẹ cháy tỏi",
+          price: 129000,
         },
         {
-                "name": "Càng cúm rang muối",
-                "price": 119000
+          name: "Càng cúm rang muối",
+          price: 119000,
         },
         {
-                "name": "Càng cúm rang me",
-                "price": 119000
+          name: "Càng cúm rang me",
+          price: 119000,
         },
         {
-                "name": "Ốc bulot rang muối",
-                "price": 119000
+          name: "Ốc bulot rang muối",
+          price: 119000,
         },
         {
-                "name": "Ốc bulot rang me",
-                "price": 119000
+          name: "Ốc bulot rang me",
+          price: 119000,
         },
         {
-                "name": "Ốc bulot hấp thái",
-                "price": 119000
+          name: "Ốc bulot hấp thái",
+          price: 119000,
         },
         {
-                "name": "Ốc bulot hấp sả",
-                "price": 119000
+          name: "Ốc bulot hấp sả",
+          price: 119000,
         },
         {
-                "name": "Ốc móng tay xào mì",
-                "price": 99000
+          name: "Ốc móng tay xào mì",
+          price: 99000,
         },
         {
-                "name": "Ốc móng tay cháy tỏi",
-                "price": 99000
+          name: "Ốc móng tay cháy tỏi",
+          price: 99000,
         },
         {
-                "name": "Sò mai nướng muối ớt",
-                "price": 25000
+          name: "Sò mai nướng muối ớt",
+          price: 25000,
         },
         {
-                "name": "Sò mai nướng phô mai",
-                "price": 25000
+          name: "Sò mai nướng phô mai",
+          price: 25000,
         },
         {
-                "name": "Sò mai nướng mỡ hành",
-                "price": 25000
+          name: "Sò mai nướng mỡ hành",
+          price: 25000,
         },
         {
-                "name": "Ếch xào lăn",
-                "price": 189000
+          name: "Ếch xào lăn",
+          price: 189000,
         },
         {
-                "name": "Sườn dê chiên nước mắm",
-                "price": 219000
+          name: "Sườn dê chiên nước mắm",
+          price: 219000,
         },
         {
-                "name": "Dê xối sả",
-                "price": 219000
+          name: "Dê xối sả",
+          price: 219000,
         },
         {
-                "name": "Bạch tuộc xào chua ngọt",
-                "price": 139000
+          name: "Bạch tuộc xào chua ngọt",
+          price: 139000,
         },
         {
-                "name": "Tôm sú nướng mọi",
-                "price": 60000
+          name: "Tôm sú nướng mọi",
+          price: 60000,
         },
         {
-                "name": "Tôm thẻ nướng mọi",
-                "price": 55000
+          name: "Tôm thẻ nướng mọi",
+          price: 55000,
         },
         {
-                "name": "Bao tử xào hành cần",
-                "price": 109000
+          name: "Bao tử xào hành cần",
+          price: 109000,
         },
         {
-                "name": "Ba rọi nướng muối ớt",
-                "price": 119000
+          name: "Ba rọi nướng muối ớt",
+          price: 119000,
         },
         {
-                "name": "ba rọi luộc + cà pháo mắm tôm",
-                "price": 139000
+          name: "ba rọi luộc + cà pháo mắm tôm",
+          price: 139000,
         },
         {
-                "name": "Đậu bắp xào tỏi",
-                "price": 99000
+          name: "Đậu bắp xào tỏi",
+          price: 99000,
         },
         {
-                "name": "Rau nhút xào bò",
-                "price": 109000
+          name: "Rau nhút xào bò",
+          price: 109000,
         },
         {
-                "name": "Rau nhút xào tỏi",
-                "price": 89000
+          name: "Rau nhút xào tỏi",
+          price: 89000,
         },
         {
-                "name": "Cháo Nghêu",
-                "price": 159000
+          name: "Cháo Nghêu",
+          price: 159000,
         },
         {
-                "name": "Đuôi heo chiên giòn",
-                "price": 169000
+          name: "Đuôi heo chiên giòn",
+          price: 169000,
         },
         {
-                "name": "Bò cháy tiêu xanh",
-                "price": 149000
+          name: "Bò cháy tiêu xanh",
+          price: 149000,
         },
         {
-                "name": "Heo rừng né ngủ vị",
-                "price": 159000
+          name: "Heo rừng né ngủ vị",
+          price: 159000,
         },
         {
-                "name": "Heo rừng rang riềng",
-                "price": 149000
+          name: "Heo rừng rang riềng",
+          price: 149000,
         },
         {
-                "name": "Cơm chiên phủ tôm trứng",
-                "price": 139000
+          name: "Cơm chiên phủ tôm trứng",
+          price: 139000,
         },
         {
-                "name": "Cơm chiên phủ trứng",
-                "price": 99000
+          name: "Cơm chiên phủ trứng",
+          price: 99000,
         },
         {
-                "name": "Pizza Việt Nam",
-                "price": 109000
+          name: "Pizza Việt Nam",
+          price: 109000,
         },
         {
-                "name": "Ba rọi rang riềng",
-                "price": 119000
+          name: "Ba rọi rang riềng",
+          price: 119000,
         },
         {
-                "name": "Ốc móng tay xào rau muống",
-                "price": 99000
+          name: "Ốc móng tay xào rau muống",
+          price: 99000,
         },
         {
-                "name": "Cá chạch đồng nấu mẻ",
-                "price": 229000
+          name: "Cá chạch đồng nấu mẻ",
+          price: 229000,
         },
         {
-                "name": "Cá chạch đồng chiên giòn",
-                "price": 109000
+          name: "Cá chạch đồng chiên giòn",
+          price: 109000,
         },
         {
-                "name": "phụ thu dịch vụ sau 2h",
-                "price": 200000
+          name: "phụ thu dịch vụ sau 2h",
+          price: 200000,
         },
         {
-                "name": "phụ thu dịch vụ sau 12h",
-                "price": 150000
+          name: "phụ thu dịch vụ sau 12h",
+          price: 150000,
         },
         {
-                "name": "súp bò viên",
-                "price": 99000
+          name: "súp bò viên",
+          price: 99000,
         },
         {
-                "name": "ghẹ hấp",
-                "price": 450000
+          name: "ghẹ hấp",
+          price: 450000,
         },
         {
-                "name": "ếch núp lùm",
-                "price": 119000
+          name: "ếch núp lùm",
+          price: 119000,
         },
         {
-                "name": "Cua thịt rang me",
-                "price": 490000
+          name: "Cua thịt rang me",
+          price: 490000,
         },
         {
-                "name": "lẩu chay",
-                "price": 159000
+          name: "lẩu chay",
+          price: 159000,
         },
         {
-                "name": "Sò lông hấp sả",
-                "price": 99000
+          name: "Sò lông hấp sả",
+          price: 99000,
         },
         {
-                "name": "sò lông nhung nướng mỡ hành",
-                "price": 99000
+          name: "sò lông nhung nướng mỡ hành",
+          price: 99000,
         },
         {
-                "name": "Heo rừng cháy tiêu tỏi",
-                "price": 129000
+          name: "Heo rừng cháy tiêu tỏi",
+          price: 129000,
         },
         {
-                "name": "Heo rừng hấp tía tô",
-                "price": 149000
+          name: "Heo rừng hấp tía tô",
+          price: 149000,
         },
         {
-                "name": "Heo rừng xào xả ớt",
-                "price": 129000
+          name: "Heo rừng xào xả ớt",
+          price: 129000,
         },
         {
-                "name": "Heo rừng nướng riềng mẻ",
-                "price": 129000
+          name: "Heo rừng nướng riềng mẻ",
+          price: 129000,
         },
         {
-                "name": "Heo rừng nướng ngũ vị",
-                "price": 129000
+          name: "Heo rừng nướng ngũ vị",
+          price: 129000,
         },
         {
-                "name": "Heo rừng nướng muối ớt",
-                "price": 129000
+          name: "Heo rừng nướng muối ớt",
+          price: 129000,
         },
         {
-                "name": "Tép đồng xào bơ bắp",
-                "price": 99000
+          name: "Tép đồng xào bơ bắp",
+          price: 99000,
         },
         {
-                "name": "Tép đồng xào khế",
-                "price": 99000
+          name: "Tép đồng xào khế",
+          price: 99000,
         },
         {
-                "name": "Tép đồng cháy tỏi",
-                "price": 99000
+          name: "Tép đồng cháy tỏi",
+          price: 99000,
         },
         {
-                "name": "Tép đồng rang lá chanh",
-                "price": 99000
+          name: "Tép đồng rang lá chanh",
+          price: 99000,
         },
         {
-                "name": "Gỏi tai heo xoài chua",
-                "price": 119000
+          name: "Gỏi tai heo xoài chua",
+          price: 119000,
         },
         {
-                "name": "Gỏi tai heo hoa chuối",
-                "price": 119000
+          name: "Gỏi tai heo hoa chuối",
+          price: 119000,
         },
         {
-                "name": "Gỏi tai heo dưa leo",
-                "price": 119000
+          name: "Gỏi tai heo dưa leo",
+          price: 119000,
         },
         {
-                "name": "Chân gà rút xương cháy tỏi",
-                "price": 119000
+          name: "Chân gà rút xương cháy tỏi",
+          price: 119000,
         },
         {
-                "name": "Chân gà rút xương rang muối HK",
-                "price": 119000
+          name: "Chân gà rút xương rang muối HK",
+          price: 119000,
         },
         {
-                "name": "Chân gà rút xương sốt chua ngọt",
-                "price": 119000
+          name: "Chân gà rút xương sốt chua ngọt",
+          price: 119000,
         },
         {
-                "name": "Chân gà rút xương nướng ngũ vị",
-                "price": 119000
+          name: "Chân gà rút xương nướng ngũ vị",
+          price: 119000,
         },
         {
-                "name": "Gỏi chân gà rút xương",
-                "price": 129000
+          name: "Gỏi chân gà rút xương",
+          price: 129000,
         },
         {
-                "name": "lẩu cá bóp",
-                "price": 269000
+          name: "lẩu cá bóp",
+          price: 269000,
         },
         {
-                "name": "Cá bóp nướng muối ớt",
-                "price": 169000
+          name: "Cá bóp nướng muối ớt",
+          price: 169000,
         },
         {
-                "name": "ngao 2 còi",
-                "price": 550000
+          name: "ngao 2 còi",
+          price: 550000,
         },
         {
-                "name": "gỏi xoài ko",
-                "price": 69000
+          name: "gỏi xoài ko",
+          price: 69000,
         },
         {
-                "name": "Bia Heneken lùn",
-                "price": 22000
+          name: "Bia Heneken lùn",
+          price: 22000,
         },
         {
-                "name": "sò huyết cồ",
-                "price": 450000
+          name: "sò huyết cồ",
+          price: 450000,
         },
         {
-                "name": "TRANG TRI",
-                "price": 300000
+          name: "TRANG TRI",
+          price: 300000,
         },
         {
-                "name": "Mì xào chay",
-                "price": 99000
+          name: "Mì xào chay",
+          price: 99000,
         },
         {
-                "name": "Bao tử hầm tiêu xanh",
-                "price": 249000
+          name: "Bao tử hầm tiêu xanh",
+          price: 249000,
         },
         {
-                "name": "Khoai môn chiên nước mắm",
-                "price": 89000
+          name: "Khoai môn chiên nước mắm",
+          price: 89000,
         },
         {
-                "name": "Đĩa hải sản nhúng lẩu",
-                "price": 130000
+          name: "Đĩa hải sản nhúng lẩu",
+          price: 130000,
         },
         {
-                "name": "Lươn xào xả ớt",
-                "price": 139000
+          name: "Lươn xào xả ớt",
+          price: 139000,
         },
         {
-                "name": "Khổ qua xào bò",
-                "price": 119000
+          name: "Khổ qua xào bò",
+          price: 119000,
         },
         {
-                "name": "Tép đồng bánh đa",
-                "price": 99000
+          name: "Tép đồng bánh đa",
+          price: 99000,
         },
         {
-                "name": "Lẩu hải sản",
-                "price": 269000
+          name: "Lẩu hải sản",
+          price: 269000,
         },
         {
-                "name": "Bò thêm",
-                "price": 55000
+          name: "Bò thêm",
+          price: 55000,
         },
         {
-                "name": "Đậu hủ chà bông",
-                "price": 79000
+          name: "Đậu hủ chà bông",
+          price: 79000,
         },
         {
-                "name": "snack",
-                "price": 20000
+          name: "snack",
+          price: 20000,
         },
         {
-                "name": "Tiger mini",
-                "price": 17000
+          name: "Tiger mini",
+          price: 17000,
         },
         {
-                "name": "cua nấu bầu",
-                "price": 390000
+          name: "cua nấu bầu",
+          price: 390000,
         },
         {
-                "name": "Trứng ốp la",
-                "price": 10000
+          name: "Trứng ốp la",
+          price: 10000,
         },
         {
-                "name": "Bánh tráng",
-                "price": 10000
+          name: "Bánh tráng",
+          price: 10000,
         },
         {
-                "name": "Đĩa bún lớn",
-                "price": 50000
+          name: "Đĩa bún lớn",
+          price: 50000,
         },
         {
-                "name": "Trái bắp nướng mỡ hành",
-                "price": 21000
+          name: "Trái bắp nướng mỡ hành",
+          price: 21000,
         },
         {
-                "name": "Cải thìa xào tỏi",
-                "price": 79000
+          name: "Cải thìa xào tỏi",
+          price: 79000,
         },
         {
-                "name": "Cà tím mỡ hành",
-                "price": 79000
+          name: "Cà tím mỡ hành",
+          price: 79000,
         },
         {
-                "name": "Cá chim nướng muối ớt",
-                "price": 390000
+          name: "Cá chim nướng muối ớt",
+          price: 390000,
         },
         {
-                "name": "Tôm khô củ kiệu bắc thảo",
-                "price": 99000
+          name: "Tôm khô củ kiệu bắc thảo",
+          price: 99000,
         },
         {
-                "name": "Ớt chuông ướp đá",
-                "price": 69000
+          name: "Ớt chuông ướp đá",
+          price: 69000,
         },
         {
-                "name": "Ớt chuông ướp lạnh",
-                "price": 69000
+          name: "Ớt chuông ướp lạnh",
+          price: 69000,
         },
         {
-                "name": "Đĩa bắp bò",
-                "price": 120000
+          name: "Đĩa bắp bò",
+          price: 120000,
         },
         {
-                "name": "Đĩa chà bông",
-                "price": 50000
+          name: "Đĩa chà bông",
+          price: 50000,
         },
         {
-                "name": "Đậu bắp luộc",
-                "price": 49000
+          name: "Đậu bắp luộc",
+          price: 49000,
         },
         {
-                "name": "Heneken yến",
-                "price": 33000
+          name: "Heneken yến",
+          price: 33000,
         },
         {
-                "name": "Bánh mì",
-                "price": 7000
+          name: "Bánh mì",
+          price: 7000,
         },
         {
-                "name": "Ghẹ hấp",
-                "price": 600000
+          name: "Ghẹ hấp",
+          price: 600000,
         },
         {
-                "name": "Nấm biển xào",
-                "price": 129000
+          name: "Nấm biển xào",
+          price: 129000,
         },
         {
-                "name": "Trứng luộc hồng đào",
-                "price": 10000
+          name: "Trứng luộc hồng đào",
+          price: 10000,
         },
         {
-                "name": "Cơm chiên tỏi",
-                "price": 109000
+          name: "Cơm chiên tỏi",
+          price: 109000,
         },
         {
-                "name": "Trái bắp luộc",
-                "price": 20000
+          name: "Trái bắp luộc",
+          price: 20000,
         },
         {
-                "name": "Trứng gà sống",
-                "price": 7000
+          name: "Trứng gà sống",
+          price: 7000,
         },
         {
-                "name": "Trứng rán",
-                "price": 50000
+          name: "Trứng rán",
+          price: 50000,
         },
         {
-                "name": "Rau luộc không",
-                "price": 79000
+          name: "Rau luộc không",
+          price: 79000,
         },
         {
-                "name": "Thịt ba chỉ luộc",
-                "price": 99000
+          name: "Thịt ba chỉ luộc",
+          price: 99000,
         },
         {
-                "name": "Nấm rơm xào",
-                "price": 99000
+          name: "Nấm rơm xào",
+          price: 99000,
         },
         {
-                "name": "Bún gạo xào chay",
-                "price": 99000
+          name: "Bún gạo xào chay",
+          price: 99000,
         },
         {
-                "name": "Bắp bò xào cải chua",
-                "price": 139000
+          name: "Bắp bò xào cải chua",
+          price: 139000,
         },
         {
-                "name": "Mì thêm",
-                "price": 10000
+          name: "Mì thêm",
+          price: 10000,
         },
         {
-                "name": "Đậu hủ chiên sả",
-                "price": 79000
+          name: "Đậu hủ chiên sả",
+          price: 79000,
         },
         {
-                "name": "Phụ thu dịch vụ",
-                "price": 100000
+          name: "Phụ thu dịch vụ",
+          price: 100000,
         },
         {
-                "name": "Mì nấu ko",
-                "price": 30000
+          name: "Mì nấu ko",
+          price: 30000,
         },
         {
-                "name": "Chanh nóng",
-                "price": 20000
+          name: "Chanh nóng",
+          price: 20000,
         },
         {
-                "name": "Cá lóc hấp bầu",
-                "price": 199000
+          name: "Cá lóc hấp bầu",
+          price: 199000,
         },
         {
-                "name": "Bún thêm",
-                "price": 10000
+          name: "Bún thêm",
+          price: 10000,
         },
         {
-                "name": "Dồi trường hấp hành gừng",
-                "price": 109000
+          name: "Dồi trường hấp hành gừng",
+          price: 109000,
         },
         {
-                "name": "Trái cây",
-                "price": 100000
+          name: "Trái cây",
+          price: 100000,
         },
         {
-                "name": "Lẩu đầu cá hồi",
-                "price": 269000
+          name: "Lẩu đầu cá hồi",
+          price: 269000,
         },
         {
-                "name": "Lẩu cá Diêu Hồng nấu ngót",
-                "price": 249000
+          name: "Lẩu cá Diêu Hồng nấu ngót",
+          price: 249000,
         },
         {
-                "name": "Lẩu ếch lá giang",
-                "price": 249000
+          name: "Lẩu ếch lá giang",
+          price: 249000,
         },
         {
-                "name": "Lẩu cá Thác Lác khổ qua",
-                "price": 249000
+          name: "Lẩu cá Thác Lác khổ qua",
+          price: 249000,
         },
         {
-                "name": "Lẩu bò thập cẩm",
-                "price": 269000
+          name: "Lẩu bò thập cẩm",
+          price: 269000,
         },
         {
-                "name": "Lẩu đuôi bò",
-                "price": 269000
+          name: "Lẩu đuôi bò",
+          price: 269000,
         },
         {
-                "name": "Lẩu cua đồng hải sản",
-                "price": 269000
+          name: "Lẩu cua đồng hải sản",
+          price: 269000,
         },
         {
-                "name": "Lẩu cua đồng bắp bò",
-                "price": 269000
+          name: "Lẩu cua đồng bắp bò",
+          price: 269000,
         },
         {
-                "name": "Lẩu Thái",
-                "price": 269000
+          name: "Lẩu Thái",
+          price: 269000,
         },
         {
-                "name": "Lẩu gà ta tiềm ớt hiểm",
-                "price": 329000
+          name: "Lẩu gà ta tiềm ớt hiểm",
+          price: 329000,
         },
         {
-                "name": "Lẩu gà lá giang",
-                "price": 329000
+          name: "Lẩu gà lá giang",
+          price: 329000,
         },
         {
-                "name": "Lẩu gà hầm sả",
-                "price": 329000
+          name: "Lẩu gà hầm sả",
+          price: 329000,
         },
         {
-                "name": "Ếch nướng muối ớt",
-                "price": 119000
+          name: "Ếch nướng muối ớt",
+          price: 119000,
         },
         {
-                "name": "Ếch chiên nước mắm",
-                "price": 119000
+          name: "Ếch chiên nước mắm",
+          price: 119000,
         },
         {
-                "name": "Ếch xào sả ớt",
-                "price": 119000
+          name: "Ếch xào sả ớt",
+          price: 119000,
         },
         {
-                "name": "Ếch rang muối tuyết",
-                "price": 119000
+          name: "Ếch rang muối tuyết",
+          price: 119000,
         },
         {
-                "name": "Cua thịt hấp",
-                "price": 650000
+          name: "Cua thịt hấp",
+          price: 650000,
         },
         {
-                "name": "Sườn non nướng muối ớt",
-                "price": 129000
+          name: "Sườn non nướng muối ớt",
+          price: 129000,
         },
         {
-                "name": "Sườn non xào chua ngọt",
-                "price": 129000
+          name: "Sườn non xào chua ngọt",
+          price: 129000,
         },
         {
-                "name": "Bao tử xào cải chua",
-                "price": 109000
+          name: "Bao tử xào cải chua",
+          price: 109000,
         },
         {
-                "name": "Vú nướng chao",
-                "price": 119000
+          name: "Vú nướng chao",
+          price: 119000,
         },
         {
-                "name": "Dồi trường xào cải chua",
-                "price": 109000
+          name: "Dồi trường xào cải chua",
+          price: 109000,
         },
         {
-                "name": "Giò heo muối chiên giòn",
-                "price": 219000
+          name: "Giò heo muối chiên giòn",
+          price: 219000,
         },
         {
-                "name": "Sườn dê nướng",
-                "price": 219000
+          name: "Sườn dê nướng",
+          price: 219000,
         },
         {
-                "name": "Dê hấp tía tô",
-                "price": 219000
+          name: "Dê hấp tía tô",
+          price: 219000,
         },
         {
-                "name": "Cháo hào",
-                "price": 159000
+          name: "Cháo hào",
+          price: 159000,
         },
         {
-                "name": "Cháo bò bằm",
-                "price": 159000
+          name: "Cháo bò bằm",
+          price: 159000,
         },
         {
-                "name": "Cháo sò huyết",
-                "price": 159000
+          name: "Cháo sò huyết",
+          price: 159000,
         },
         {
-                "name": "Mì xào hải sản",
-                "price": 119000
+          name: "Mì xào hải sản",
+          price: 119000,
         },
         {
-                "name": "Mì xào bò",
-                "price": 119000
+          name: "Mì xào bò",
+          price: 119000,
         },
         {
-                "name": "Bún gạo xào hải sản",
-                "price": 119000
+          name: "Bún gạo xào hải sản",
+          price: 119000,
         },
         {
-                "name": "Bún gạo xào bò",
-                "price": 119000
+          name: "Bún gạo xào bò",
+          price: 119000,
         },
         {
-                "name": "Cơm chiên cá mặn",
-                "price": 109000
+          name: "Cơm chiên cá mặn",
+          price: 109000,
         },
         {
-                "name": "Cơm chiên hải sản",
-                "price": 109000
+          name: "Cơm chiên hải sản",
+          price: 109000,
         },
         {
-                "name": "Cơm chiên Dương Châu",
-                "price": 109000
+          name: "Cơm chiên Dương Châu",
+          price: 109000,
         },
         {
-                "name": "Cơm chiên dưa bò",
-                "price": 109000
+          name: "Cơm chiên dưa bò",
+          price: 109000,
         },
         {
-                "name": "Mực lá hấp gừng",
-                "price": 139000
+          name: "Mực lá hấp gừng",
+          price: 139000,
         },
         {
-                "name": "Mực lá chiên nước mắm",
-                "price": 139000
+          name: "Mực lá chiên nước mắm",
+          price: 139000,
         },
         {
-                "name": "Mực lá chiên giòn",
-                "price": 139000
+          name: "Mực lá chiên giòn",
+          price: 139000,
         },
         {
-                "name": "Mực lá xào chua ngọt",
-                "price": 139000
+          name: "Mực lá xào chua ngọt",
+          price: 139000,
         },
         {
-                "name": "Mực lá nướng muối ớt",
-                "price": 139000
+          name: "Mực lá nướng muối ớt",
+          price: 139000,
         },
         {
-                "name": "Mực trứng chiên nước mắm",
-                "price": 139000
+          name: "Mực trứng chiên nước mắm",
+          price: 139000,
         },
         {
-                "name": "Bạch tuộc nướng muối ớt",
-                "price": 139000
+          name: "Bạch tuộc nướng muối ớt",
+          price: 139000,
         },
         {
-                "name": "Bạch tuộc hấp gừng",
-                "price": 139000
+          name: "Bạch tuộc hấp gừng",
+          price: 139000,
         },
         {
-                "name": "Phụ thu Bia đem vào",
-                "price": 100000
+          name: "Phụ thu Bia đem vào",
+          price: 100000,
         },
         {
-                "name": "Phụ thu Rượu đem vào",
-                "price": 100000
+          name: "Phụ thu Rượu đem vào",
+          price: 100000,
         },
         {
-                "name": "Phụ thu chế biến Hải sản",
-                "price": 100000
+          name: "Phụ thu chế biến Hải sản",
+          price: 100000,
         },
         {
-                "name": "Phụ thu chế biến các món sống khác",
-                "price": 200000
+          name: "Phụ thu chế biến các món sống khác",
+          price: 200000,
         },
         {
-                "name": "Rau lẩu thêm",
-                "price": 30000
+          name: "Rau lẩu thêm",
+          price: 30000,
         },
         {
-                "name": "Rau sống thêm",
-                "price": 30000
+          name: "Rau sống thêm",
+          price: 30000,
         },
         {
-                "name": "Chén mù tạt",
-                "price": 5000
+          name: "Chén mù tạt",
+          price: 5000,
         },
         {
-                "name": "Tuýp mù tạt",
-                "price": 40000
+          name: "Tuýp mù tạt",
+          price: 40000,
         },
         {
-                "name": "Cơm lam thêm",
-                "price": 25000
+          name: "Cơm lam thêm",
+          price: 25000,
         },
         {
-                "name": "Hào sống mù tạt",
-                "price": 25000
+          name: "Hào sống mù tạt",
+          price: 25000,
         },
         {
-                "name": "Hào nướng mỡ hành",
-                "price": 30000
+          name: "Hào nướng mỡ hành",
+          price: 30000,
         },
         {
-                "name": "Hào nướng phô mai",
-                "price": 30000
+          name: "Hào nướng phô mai",
+          price: 30000,
         },
         {
-                "name": "Sò điệp nướng mỡ hành",
-                "price": 99000
+          name: "Sò điệp nướng mỡ hành",
+          price: 99000,
         },
         {
-                "name": "Sò điệp nướng phô mai",
-                "price": 99000
+          name: "Sò điệp nướng phô mai",
+          price: 99000,
         },
         {
-                "name": "Nghêu hấp sả",
-                "price": 89000
+          name: "Nghêu hấp sả",
+          price: 89000,
         },
         {
-                "name": "Nghêu hấp Thái",
-                "price": 89000
+          name: "Nghêu hấp Thái",
+          price: 89000,
         },
         {
-                "name": "Nghêu xào lá quế",
-                "price": 89000
+          name: "Nghêu xào lá quế",
+          price: 89000,
         },
         {
-                "name": "Ốc bươu nướng tiêu",
-                "price": 99000
+          name: "Ốc bươu nướng tiêu",
+          price: 99000,
         },
         {
-                "name": "Ốc bươu hấp sả",
-                "price": 99000
+          name: "Ốc bươu hấp sả",
+          price: 99000,
         },
         {
-                "name": "Sò huyết cháy tỏi",
-                "price": 119000
+          name: "Sò huyết cháy tỏi",
+          price: 119000,
         },
         {
-                "name": "Sò huyết lacos",
-                "price": 129000
+          name: "Sò huyết lacos",
+          price: 129000,
         },
         {
-                "name": "Càng ghẹ rang me",
-                "price": 129000
+          name: "Càng ghẹ rang me",
+          price: 129000,
         },
         {
-                "name": "Càng ghẹ rang muối",
-                "price": 129000
+          name: "Càng ghẹ rang muối",
+          price: 129000,
         },
         {
-                "name": "Ốc hương cháy tỏi",
-                "price": 159000
+          name: "Ốc hương cháy tỏi",
+          price: 159000,
         },
         {
-                "name": "Ốc hương rang muối",
-                "price": 159000
+          name: "Ốc hương rang muối",
+          price: 159000,
         },
         {
-                "name": "Ốc hương hấp sả",
-                "price": 159000
+          name: "Ốc hương hấp sả",
+          price: 159000,
         },
         {
-                "name": "Ốc hương nướng mọi",
-                "price": 159000
+          name: "Ốc hương nướng mọi",
+          price: 159000,
         },
         {
-                "name": "Ốc hương sốt trứng muối",
-                "price": 159000
+          name: "Ốc hương sốt trứng muối",
+          price: 159000,
         },
         {
-                "name": "Cá Chình 2 món",
-                "price": 700000
+          name: "Cá Chình 2 món",
+          price: 700000,
         },
         {
-                "name": "Cá Tầm 2 món",
-                "price": 670000
+          name: "Cá Tầm 2 món",
+          price: 670000,
         },
         {
-                "name": "Cá Mú hấp Hong Kong",
-                "price": 620000
+          name: "Cá Mú hấp Hong Kong",
+          price: 620000,
         },
         {
-                "name": "Cá Lăng 2 món nướng + lẩu",
-                "price": 450000
+          name: "Cá Lăng 2 món nướng + lẩu",
+          price: 450000,
         },
         {
-                "name": "Cá Tai Tượng chiên xù",
-                "price": 269000
+          name: "Cá Tai Tượng chiên xù",
+          price: 269000,
         },
         {
-                "name": "Cá Diêu Hồng hấp Hong Kong",
-                "price": 199000
+          name: "Cá Diêu Hồng hấp Hong Kong",
+          price: 199000,
         },
         {
-                "name": "Cá Diêu Hồng chiên xù",
-                "price": 199000
+          name: "Cá Diêu Hồng chiên xù",
+          price: 199000,
         },
         {
-                "name": "Cá Cam nướng giấy bạc",
-                "price": 179000
+          name: "Cá Cam nướng giấy bạc",
+          price: 179000,
         },
         {
-                "name": "Cá Cam nướng muối ớt",
-                "price": 179000
+          name: "Cá Cam nướng muối ớt",
+          price: 179000,
         },
         {
-                "name": "Cá Thác Lác rút xương chiên xả",
-                "price": 169000
+          name: "Cá Thác Lác rút xương chiên xả",
+          price: 169000,
         },
         {
-                "name": "Cá Thác Lác rút xương chiên giòn",
-                "price": 169000
+          name: "Cá Thác Lác rút xương chiên giòn",
+          price: 169000,
         },
         {
-                "name": "Cá Thác Lác hấp cải bẹ xanh",
-                "price": 149000
+          name: "Cá Thác Lác hấp cải bẹ xanh",
+          price: 149000,
         },
         {
-                "name": "Chả cá Thác Lác chiên",
-                "price": 109000
+          name: "Chả cá Thác Lác chiên",
+          price: 109000,
         },
         {
-                "name": "Cá trứng chiên giòn",
-                "price": 79000
+          name: "Cá trứng chiên giòn",
+          price: 79000,
         },
         {
-                "name": "Đầu cá hồi chiên nước mắm",
-                "price": 99000
+          name: "Đầu cá hồi chiên nước mắm",
+          price: 99000,
         },
         {
-                "name": "Đầu cá hồi nướng muối ớt",
-                "price": 99000
+          name: "Đầu cá hồi nướng muối ớt",
+          price: 99000,
         },
         {
-                "name": "Vây cá hồi chiên nước mắm",
-                "price": 99000
+          name: "Vây cá hồi chiên nước mắm",
+          price: 99000,
         },
         {
-                "name": "Vây cá hồi nướng muối ớt",
-                "price": 99000
+          name: "Vây cá hồi nướng muối ớt",
+          price: 99000,
         },
         {
-                "name": "Cánh gà chiên nước mắm",
-                "price": 119000
+          name: "Cánh gà chiên nước mắm",
+          price: 119000,
         },
         {
-                "name": "Cánh gà hấp hành",
-                "price": 119000
+          name: "Cánh gà hấp hành",
+          price: 119000,
         },
         {
-                "name": "Cánh gà nướng muối ớt",
-                "price": 119000
+          name: "Cánh gà nướng muối ớt",
+          price: 119000,
         },
         {
-                "name": "Trứng gà non cháy tỏi",
-                "price": 139000
+          name: "Trứng gà non cháy tỏi",
+          price: 139000,
         },
         {
-                "name": "Sụn gà rang muối Hong Kong",
-                "price": 119000
+          name: "Sụn gà rang muối Hong Kong",
+          price: 119000,
         },
         {
-                "name": "Sụn gà cháy tỏi",
-                "price": 119000
+          name: "Sụn gà cháy tỏi",
+          price: 119000,
         },
         {
-                "name": "Sụn gà chiên nước mắm",
-                "price": 119000
+          name: "Sụn gà chiên nước mắm",
+          price: 119000,
         },
         {
-                "name": "Chân gà chiên nước mắm",
-                "price": 119000
+          name: "Chân gà chiên nước mắm",
+          price: 119000,
         },
         {
-                "name": "Chân gà hấp hành",
-                "price": 119000
+          name: "Chân gà hấp hành",
+          price: 119000,
         },
         {
-                "name": "Chân gà nướng muối ớt",
-                "price": 119000
+          name: "Chân gà nướng muối ớt",
+          price: 119000,
         },
         {
-                "name": "Gà nổ muối hột",
-                "price": 319000
+          name: "Gà nổ muối hột",
+          price: 319000,
         },
         {
-                "name": "Gà hấp mắm nhĩ",
-                "price": 319000
+          name: "Gà hấp mắm nhĩ",
+          price: 319000,
         },
         {
-                "name": "Gà nướng muối ớt",
-                "price": 319000
+          name: "Gà nướng muối ớt",
+          price: 319000,
         },
         {
-                "name": "Gà hấp hành",
-                "price": 299000
+          name: "Gà hấp hành",
+          price: 299000,
         },
         {
-                "name": "Tôm sú sốt trứng muối",
-                "price": 60000
+          name: "Tôm sú sốt trứng muối",
+          price: 60000,
         },
         {
-                "name": "Tôm sú sốt thái",
-                "price": 60000
+          name: "Tôm sú sốt thái",
+          price: 60000,
         },
         {
-                "name": "Tôm sú wasabi",
-                "price": 60000
+          name: "Tôm sú wasabi",
+          price: 60000,
         },
         {
-                "name": "Tôm sú cháy tói",
-                "price": 60000
+          name: "Tôm sú cháy tói",
+          price: 60000,
         },
         {
-                "name": "Tôm sú nướng",
-                "price": 60000
+          name: "Tôm sú nướng",
+          price: 60000,
         },
         {
-                "name": "Tôm thẻ sốt trứng muối",
-                "price": 55000
+          name: "Tôm thẻ sốt trứng muối",
+          price: 55000,
         },
         {
-                "name": "Tôm thẻ sốt thái",
-                "price": 55000
+          name: "Tôm thẻ sốt thái",
+          price: 55000,
         },
         {
-                "name": "Tôm thẻ wasabi",
-                "price": 55000
+          name: "Tôm thẻ wasabi",
+          price: 55000,
         },
         {
-                "name": "Tôm thẻ cháy tỏi",
-                "price": 55000
+          name: "Tôm thẻ cháy tỏi",
+          price: 55000,
         },
         {
-                "name": "Tôm thẻ nướng muối ớt",
-                "price": 55000
+          name: "Tôm thẻ nướng muối ớt",
+          price: 55000,
         },
         {
-                "name": "Đuôi bò xào khế",
-                "price": 169000
+          name: "Đuôi bò xào khế",
+          price: 169000,
         },
         {
-                "name": "Sườn bò nướng muối ớt",
-                "price": 169000
+          name: "Sườn bò nướng muối ớt",
+          price: 169000,
         },
         {
-                "name": "Bò cuộn cải bẹ xanh",
-                "price": 139000
+          name: "Bò cuộn cải bẹ xanh",
+          price: 139000,
         },
         {
-                "name": "Bò lúc lắc",
-                "price": 149000
+          name: "Bò lúc lắc",
+          price: 149000,
         },
         {
-                "name": "Lá sách xào khế",
-                "price": 119000
+          name: "Lá sách xào khế",
+          price: 119000,
         },
         {
-                "name": "Lá sách hấp hành gừng",
-                "price": 119000
+          name: "Lá sách hấp hành gừng",
+          price: 119000,
         },
         {
-                "name": "Lá sách xào cải chua",
-                "price": 119000
+          name: "Lá sách xào cải chua",
+          price: 119000,
         },
         {
-                "name": "Bò xào hành cần",
-                "price": 119000
+          name: "Bò xào hành cần",
+          price: 119000,
         },
         {
-                "name": "Bò nướng mắm nhĩ",
-                "price": 55000
+          name: "Bò nướng mắm nhĩ",
+          price: 55000,
         },
         {
-                "name": "Lươn um chuối",
-                "price": 199000
+          name: "Lươn um chuối",
+          price: 199000,
         },
         {
-                "name": "Bạch tuộc nhúng mẻ",
-                "price": 229000
+          name: "Bạch tuộc nhúng mẻ",
+          price: 229000,
         },
         {
-                "name": "Bạch tuộc nhúng giấm",
-                "price": 229000
+          name: "Bạch tuộc nhúng giấm",
+          price: 229000,
         },
         {
-                "name": "Lá sách nhúng mẻ",
-                "price": 199000
+          name: "Lá sách nhúng mẻ",
+          price: 199000,
         },
         {
-                "name": "Bắp bò nhúng giấm",
-                "price": 199000
+          name: "Bắp bò nhúng giấm",
+          price: 199000,
         },
         {
-                "name": "Bò nhúng giấm",
-                "price": 199000
+          name: "Bò nhúng giấm",
+          price: 199000,
         },
         {
-                "name": "Bắp bò nhúng mẻ",
-                "price": 199000
+          name: "Bắp bò nhúng mẻ",
+          price: 199000,
         },
         {
-                "name": "Bò nhúng mẻ",
-                "price": 199000
+          name: "Bò nhúng mẻ",
+          price: 199000,
         },
         {
-                "name": "Ếch um chuối",
-                "price": 229000
+          name: "Ếch um chuối",
+          price: 229000,
         },
         {
-                "name": "Rau luộc kho quẹt",
-                "price": 119000
+          name: "Rau luộc kho quẹt",
+          price: 119000,
         },
         {
-                "name": "Bí non xào tôm khô",
-                "price": 109000
+          name: "Bí non xào tôm khô",
+          price: 109000,
         },
         {
-                "name": "Măng tây xào bò",
-                "price": 119000
+          name: "Măng tây xào bò",
+          price: 119000,
         },
         {
-                "name": "Măng tây xào tỏi",
-                "price": 99000
+          name: "Măng tây xào tỏi",
+          price: 99000,
         },
         {
-                "name": "Bí non xào bò",
-                "price": 119000
+          name: "Bí non xào bò",
+          price: 119000,
         },
         {
-                "name": "Bí non xào tỏi",
-                "price": 99000
+          name: "Bí non xào tỏi",
+          price: 99000,
         },
         {
-                "name": "Bông cải xào bò",
-                "price": 109000
+          name: "Bông cải xào bò",
+          price: 109000,
         },
         {
-                "name": "Bông cải xào tỏi",
-                "price": 89000
+          name: "Bông cải xào tỏi",
+          price: 89000,
         },
         {
-                "name": "Khổ qua xào trứng",
-                "price": 99000
+          name: "Khổ qua xào trứng",
+          price: 99000,
         },
         {
-                "name": "Rau muống xào bò",
-                "price": 99000
+          name: "Rau muống xào bò",
+          price: 99000,
         },
         {
-                "name": "Rau muống xào tỏi",
-                "price": 79000
+          name: "Rau muống xào tỏi",
+          price: 79000,
         },
         {
-                "name": "Rau lang xào tỏi",
-                "price": 79000
+          name: "Rau lang xào tỏi",
+          price: 79000,
         },
         {
-                "name": "Gà nướng cơm lam",
-                "price": 349000
+          name: "Gà nướng cơm lam",
+          price: 349000,
         },
         {
-                "name": "Sườn cừu nướng Triều Châu",
-                "price": 259000
+          name: "Sườn cừu nướng Triều Châu",
+          price: 259000,
         },
         {
-                "name": "Sườn cừu sốt tiêu",
-                "price": 259000
+          name: "Sườn cừu sốt tiêu",
+          price: 259000,
         },
         {
-                "name": "Bò lên đá",
-                "price": 249000
+          name: "Bò lên đá",
+          price: 249000,
         },
         {
-                "name": "Sườn cay thái lan",
-                "price": 249000
+          name: "Sườn cay thái lan",
+          price: 249000,
         },
         {
-                "name": "Gỏi bò Vip biển",
-                "price": 119000
+          name: "Gỏi bò Vip biển",
+          price: 119000,
         },
         {
-                "name": "Chả giò hải sản",
-                "price": 149000
+          name: "Chả giò hải sản",
+          price: 149000,
         },
         {
-                "name": "Khô mực chiên nước mắm",
-                "price": 159000
+          name: "Khô mực chiên nước mắm",
+          price: 159000,
         },
         {
-                "name": "Khô mực nướng",
-                "price": 159000
+          name: "Khô mực nướng",
+          price: 159000,
         },
         {
-                "name": "Khô cá dứa chiên giòn",
-                "price": 109000
+          name: "Khô cá dứa chiên giòn",
+          price: 109000,
         },
         {
-                "name": "Tóp mỡ chiên nước mắm",
-                "price": 109000
+          name: "Tóp mỡ chiên nước mắm",
+          price: 109000,
         },
         {
-                "name": "Khô cá đù một nắng chiên giòn",
-                "price": 109000
+          name: "Khô cá đù một nắng chiên giòn",
+          price: 109000,
         },
         {
-                "name": "Ốc nhồi ống lam",
-                "price": 149000
+          name: "Ốc nhồi ống lam",
+          price: 149000,
         },
         {
-                "name": "Khô bò một nắng muối kiến vàng",
-                "price": 179000
+          name: "Khô bò một nắng muối kiến vàng",
+          price: 179000,
         },
         {
-                "name": "Chả mai ghẹ",
-                "price": 139000
+          name: "Chả mai ghẹ",
+          price: 139000,
         },
         {
-                "name": "Đậu hũ giấy bạc",
-                "price": 159000
+          name: "Đậu hũ giấy bạc",
+          price: 159000,
         },
         {
-                "name": "Xà lách bò trứng",
-                "price": 129000
+          name: "Xà lách bò trứng",
+          price: 129000,
         },
         {
-                "name": "Bò bóp thấu",
-                "price": 119000
+          name: "Bò bóp thấu",
+          price: 119000,
         },
         {
-                "name": "Bò tái chanh",
-                "price": 119000
+          name: "Bò tái chanh",
+          price: 119000,
         },
         {
-                "name": "Gỏi xoài tôm khô",
-                "price": 119000
+          name: "Gỏi xoài tôm khô",
+          price: 119000,
         },
         {
-                "name": "Gỏi xoài khô sặc",
-                "price": 119000
+          name: "Gỏi xoài khô sặc",
+          price: 119000,
         },
         {
-                "name": "Gỏi củ hũ dừa hải sản",
-                "price": 129000
+          name: "Gỏi củ hũ dừa hải sản",
+          price: 129000,
         },
         {
-                "name": "Gỏi củ hũ dừa tôm thịt",
-                "price": 119000
+          name: "Gỏi củ hũ dừa tôm thịt",
+          price: 119000,
         },
         {
-                "name": "Gỏi ngó sen hải sản",
-                "price": 129000
+          name: "Gỏi ngó sen hải sản",
+          price: 129000,
         },
         {
-                "name": "Gỏi ngó sen tôm thịt",
-                "price": 129000
+          name: "Gỏi ngó sen tôm thịt",
+          price: 129000,
         },
         {
-                "name": "Gỏi tép đồng hoa chuối",
-                "price": 119000
+          name: "Gỏi tép đồng hoa chuối",
+          price: 119000,
         },
         {
-                "name": "Bò lụi sả",
-                "price": 109000
+          name: "Bò lụi sả",
+          price: 109000,
         },
         {
-                "name": "Khổ qua chà bông",
-                "price": 89000
+          name: "Khổ qua chà bông",
+          price: 89000,
         },
         {
-                "name": "Khoai tây chiên",
-                "price": 79000
+          name: "Khoai tây chiên",
+          price: 79000,
         },
         {
-                "name": "Đậu hủ chiên giòn",
-                "price": 59000
+          name: "Đậu hủ chiên giòn",
+          price: 59000,
         },
         {
-                "name": "Rượu soju",
-                "price": 130000
+          name: "Rượu soju",
+          price: 130000,
         },
         {
-                "name": "Vang trắng",
-                "price": 450000
+          name: "Vang trắng",
+          price: 450000,
         },
         {
-                "name": "Ba số Anh",
-                "price": 70000
+          name: "Ba số Anh",
+          price: 70000,
         },
         {
-                "name": "Phục vụ 2",
-                "price": 200000
+          name: "Phục vụ 2",
+          price: 200000,
         },
         {
-                "name": "Phục vụ 1",
-                "price": 200000
+          name: "Phục vụ 1",
+          price: 200000,
         },
         {
-                "name": "Thuê bàn ghế",
-                "price": 100000
+          name: "Thuê bàn ghế",
+          price: 100000,
         },
         {
-                "name": "Ba Số Bạc",
-                "price": 40000
+          name: "Ba Số Bạc",
+          price: 40000,
         },
         {
-                "name": "Ba Số Việt",
-                "price": 45000
+          name: "Ba Số Việt",
+          price: 45000,
         },
         {
-                "name": "Thuốc SG Bạc",
-                "price": 25000
+          name: "Thuốc SG Bạc",
+          price: 25000,
         },
         {
-                "name": "MÈO DEMI",
-                "price": 30000
+          name: "MÈO DEMI",
+          price: 30000,
         },
         {
-                "name": "MÈO ĐỎ",
-                "price": 40000
+          name: "MÈO ĐỎ",
+          price: 40000,
         },
         {
-                "name": "Thuốc JET",
-                "price": 40000
+          name: "Thuốc JET",
+          price: 40000,
         },
         {
-                "name": "SAIGON LAGER",
-                "price": 18000
+          name: "SAIGON LAGER",
+          price: 18000,
         },
         {
-                "name": "Đậu phộng",
-                "price": 10000
+          name: "Đậu phộng",
+          price: 10000,
         },
         {
-                "name": "Khăn lạnh",
-                "price": 3000
+          name: "Khăn lạnh",
+          price: 3000,
         },
         {
-                "name": "Nước suối",
-                "price": 20000
+          name: "Nước suối",
+          price: 20000,
         },
         {
-                "name": "STING",
-                "price": 20000
+          name: "STING",
+          price: 20000,
         },
         {
-                "name": "7UP",
-                "price": 20000
+          name: "7UP",
+          price: 20000,
         },
         {
-                "name": "COCA COLA",
-                "price": 20000
+          name: "COCA COLA",
+          price: 20000,
         },
         {
-                "name": "HEINEKEN BẠC",
-                "price": 28000
+          name: "HEINEKEN BẠC",
+          price: 28000,
         },
         {
-                "name": "TIGER BẠC",
-                "price": 24000
+          name: "TIGER BẠC",
+          price: 24000,
         },
         {
-                "name": "TIGER NÂU",
-                "price": 22000
-        }
-];
+          name: "TIGER NÂU",
+          price: 22000,
+        },
+      ];
 
       function renderQuickMenu() {
         const list = document.getElementById("quickMenuList");
@@ -2142,12 +2146,12 @@
       async function saveBill() {
         if (!APPS_SCRIPT_URL) {
           setSaveStatus("Chưa cấu hình Google Apps Script URL.");
-          return;
+          return false;
         }
 
         if (!Object.keys(items).length) {
           setSaveStatus("Bill chưa có món để lưu.");
-          return;
+          return false;
         }
 
         setSaveStatus("Đang lưu bill...");
@@ -2163,16 +2167,27 @@
           });
 
           setSaveStatus("Đã gửi bill lên Google Sheet.");
+          return true;
         } catch (error) {
           setSaveStatus("Không lưu được bill. Kiểm tra URL hoặc mạng.");
+          return false;
         }
       }
 
-      function resetBill() {
+      async function saveAndPrintBill() {
+        const saved = await saveBill();
+
+        if (!saved) return;
+
+        printBill();
+      }
+
+      function cancelBill() {
         items = {};
         total = 0;
         render();
-        setSaveStatus("");
+        document.getElementById("timeOut").innerText = "";
+        setSaveStatus("Đã hủy bill.");
       }
 
       function setTable() {

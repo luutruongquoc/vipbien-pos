@@ -10,10 +10,21 @@
         box-sizing: border-box;
       }
 
+      :root {
+        --primary: #0089d6;
+        --primary-dark: #006eae;
+        --primary-light: #e8f6fd;
+        --border: #cfe6f5;
+        --surface: #ffffff;
+        --page-bg: #073763;
+        --text: #0f2533;
+        --muted: #5d7180;
+      }
+
       body {
         margin: 0;
-        background: #f4f4f4;
-        color: #111;
+        background: var(--page-bg);
+        color: var(--text);
         font-family: monospace;
       }
 
@@ -28,8 +39,8 @@
 
       .pos-layout {
         display: grid;
-        grid-template-columns: minmax(240px, 1fr) minmax(320px, 1.2fr) minmax(
-            260px,
+        grid-template-columns: minmax(240px, 1fr) minmax(320px, 1.25fr) minmax(
+            300px,
             1fr
           );
         gap: 24px;
@@ -39,17 +50,28 @@
 
       /* ===== POS UI ===== */
       .controls,
-      .quick-panel {
+      .cart-panel,
+      .bill-column {
         align-self: start;
-        background: #fff;
-        border: 1px solid #ddd;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: calc(100vh - 48px);
+      }
+
+      .panel,
+      .bill-actions {
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 16px;
       }
 
-      .controls h3,
-      .controls h4,
-      .quick-panel h4 {
+      .panel h3,
+      .panel h4 {
         margin: 0 0 10px;
       }
 
@@ -57,35 +79,44 @@
         margin-bottom: 18px;
       }
 
+      .controls .form-group {
+        margin-bottom: 0;
+      }
+
       .table-row {
         display: grid;
-        grid-template-columns: 96px 1fr;
+        grid-template-columns: 1fr 110px;
         gap: 8px;
         align-items: center;
       }
 
-      .controls input,
-      .quick-panel input {
+      .panel input {
         width: 100%;
         margin: 4px 0;
         padding: 9px 10px;
-        border: 1px solid #bbb;
+        border: 1px solid var(--border);
         border-radius: 6px;
       }
 
-      .controls button,
-      .quick-panel button {
+      .panel input:focus {
+        border-color: var(--primary);
+        outline: 2px solid var(--primary-light);
+      }
+
+      .panel button,
+      .bill-actions button {
         width: 100%;
         margin: 4px 0;
         padding: 10px;
-        border: 1px solid #222;
+        border: 1px solid var(--primary);
         border-radius: 6px;
-        background: #fff;
+        background: var(--surface);
+        color: var(--primary-dark);
       }
 
-      .controls button:hover,
-      .quick-panel button:hover {
-        background: #eee;
+      .panel button:hover,
+      .bill-actions button:hover {
+        background: var(--primary-light);
       }
 
       .actions {
@@ -100,18 +131,18 @@
 
       .actions .primary {
         grid-column: 1 / -1;
-        background: #111;
+        background: var(--primary);
         color: #fff;
       }
 
       .actions .primary:hover {
-        background: #333;
+        background: var(--primary-dark);
       }
 
       .save-status {
         min-height: 18px;
         margin: 10px 0 0;
-        color: #555;
+        color: var(--muted);
         font-size: 12px;
       }
 
@@ -122,23 +153,29 @@
         padding-right: 4px;
       }
 
-      .quick-panel {
+      .menu-panel,
+      .cart-panel {
         display: flex;
         flex-direction: column;
         max-height: calc(100vh - 48px);
+      }
+
+      .menu-panel {
+        flex: 1;
+        min-height: 260px;
       }
 
       .menu-search {
         position: sticky;
         top: 0;
         z-index: 1;
-        background: #fff;
+        background: var(--surface);
         padding-bottom: 10px;
       }
 
       .menu-item {
         display: grid;
-        grid-template-columns: 44px 1fr 44px;
+        grid-template-columns: 1fr;
         gap: 8px;
         align-items: center;
         margin: 6px 0;
@@ -157,31 +194,100 @@
 
       .empty-menu {
         margin: 12px 0 0;
-        color: #666;
+        color: var(--muted);
         font-size: 12px;
         text-align: center;
       }
 
+      .cart-list {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .cart-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 180px;
+        gap: 16px;
+        align-items: center;
+        border-bottom: 1px dashed var(--border);
+        padding: 24px 8px;
+      }
+
+      .cart-item:first-child {
+        padding-top: 0;
+      }
+
+      .cart-name {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .cart-meta {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 4px 0 8px;
+      }
+
+      .cart-controls {
+        display: grid;
+        grid-template-columns: 44px 64px 44px;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .cart-controls button {
+        margin: 0;
+      }
+
+      .cart-qty {
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .cart-qty input {
+        margin: 0;
+        text-align: center;
+      }
+
+      @media (max-width: 980px) {
+        .cart-item {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .cart-total {
+        margin-top: 12px;
+        text-align: right;
+        font-weight: bold;
+      }
+
       /* ===== BILL VIEW ===== */
+      .bill-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
       .bill-panel {
-        align-self: start;
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        max-height: calc(100vh - 48px);
+        max-height: calc(100vh - 162px);
         overflow-y: auto;
         padding: 16px 8px;
-        background: #e9e9e9;
-        border: 1px solid #ddd;
+        background: var(--primary-light);
+        border: 1px solid var(--border);
         border-radius: 8px;
       }
 
       .bill {
         width: 80mm;
         min-height: 160mm;
-        background: #fff;
+        background: var(--surface);
         padding: 10px 8px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 24px rgba(0, 137, 214, 0.16);
       }
 
       .bill h2,
@@ -271,6 +377,7 @@
 
         .bill-panel {
           justify-content: center;
+          max-height: none;
         }
       }
 
@@ -309,83 +416,94 @@
   <body>
     <main class="pos-layout">
       <section class="controls" aria-label="Nhập liệu bán hàng">
-        <div class="form-group">
-          <h3>Nhập liệu</h3>
+        <div class="panel form-group">
+          <h3>Chọn bàn</h3>
           <div class="table-row">
-            <button onclick="setTable()">Số bàn</button>
             <input id="tableInput" placeholder="Nhập số bàn" />
+            <button type="button" onclick="setTable()">Chọn bàn</button>
           </div>
         </div>
 
-        <div class="form-group">
-          <h4>Thêm tay</h4>
+        <div class="panel form-group menu-panel" aria-label="Chọn món">
+          <div class="menu-search">
+            <h4>Chọn món</h4>
+            <input
+              id="menuSearch"
+              placeholder="Tìm món"
+              oninput="renderQuickMenu()"
+            />
+          </div>
+
+          <div class="menu-list" id="quickMenuList"></div>
+        </div>
+
+        <div class="panel">
+          <h4>Nhập món ăn bằng tay</h4>
           <input id="name" placeholder="Tên hàng" />
-          <input id="qty" type="number" placeholder="SL" />
-          <input id="price" type="number" placeholder="Giá" />
+          <div class="table-row">
+            <input id="price" type="number" placeholder="Đơn giá" />
+            <input id="qty" type="number" placeholder="SL" />
+          </div>
+          <button class="primary" type="button" onclick="addItem()">Thêm</button>
         </div>
-
-        <div class="actions">
-          <button class="primary" onclick="addItem()">Thêm</button>
-          <button onclick="saveBill()">Lưu bill</button>
-          <button onclick="printBill()">In</button>
-          <button onclick="resetBill()">Reset</button>
-        </div>
-        <p class="save-status" id="saveStatus"></p>
       </section>
 
-      <section class="quick-panel" aria-label="Chọn nhanh món">
-        <div class="menu-search">
-          <h4>Chọn nhanh</h4>
-          <input
-            id="menuSearch"
-            placeholder="Tìm món"
-            oninput="renderQuickMenu()"
-          />
-        </div>
-
-        <div class="menu-list" id="quickMenuList"></div>
+      <section class="panel cart-panel" aria-label="Món đã chọn">
+        <h3>Món đã chọn</h3>
+        <div class="cart-list" id="cartList"></div>
+        <div class="cart-total" id="cartTotal">Tổng: 0</div>
       </section>
 
-      <section class="bill-panel" aria-label="Xem trước hóa đơn">
-        <div class="bill" id="bill">
-          <h2>VIP BIỂN</h2>
-          <p>21 Nguyễn Văn Linh, phường Tân Thuận Tây, Q7, TP.HCM</p>
-          <p>ĐT: 0902431291</p>
+      <section class="bill-column" aria-label="Xem trước hóa đơn">
+        <div class="bill-panel">
+          <div class="bill" id="bill">
+            <h2>VIP BIỂN</h2>
+            <p>21 Nguyễn Văn Linh, phường Tân Thuận Tây, Q7, TP.HCM</p>
+            <p>ĐT: 0902431291</p>
 
-          <hr />
+            <hr />
 
-          <div class="info">
-            <span>Bàn: <span id="tableNo">VIP 4</span></span>
-            <span>Phiếu tính tiền</span>
+            <div class="info">
+              <span>Bàn: <span id="tableNo">VIP 4</span></span>
+              <span>Phiếu tính tiền</span>
+            </div>
+
+            <div class="info">
+              <span id="timeIn"></span>
+              <span id="timeOut"></span>
+            </div>
+
+            <hr />
+
+            <table id="items">
+              <colgroup>
+                <col class="col-name" />
+                <col class="col-qty" />
+                <col class="col-price" />
+                <col class="col-amount" />
+              </colgroup>
+              <tr>
+                <th>Tên</th>
+                <th class="qty">SL</th>
+                <th class="right">Đ.Giá</th>
+                <th class="right">Tiền</th>
+              </tr>
+            </table>
+
+            <hr />
+
+            <div class="total" id="total">TỔNG: 0</div>
+
+            <p>Cảm ơn quý khách!</p>
           </div>
+        </div>
 
-          <div class="info">
-            <span id="timeIn"></span>
-            <span id="timeOut"></span>
+        <div class="bill-actions">
+          <div class="actions">
+            <button type="button" onclick="saveBill()">Lưu bill</button>
+            <button type="button" onclick="printBill()">In</button>
           </div>
-
-          <hr />
-
-          <table id="items">
-            <colgroup>
-              <col class="col-name" />
-              <col class="col-qty" />
-              <col class="col-price" />
-              <col class="col-amount" />
-            </colgroup>
-            <tr>
-              <th>Tên</th>
-              <th class="qty">SL</th>
-              <th class="right">Đ.Giá</th>
-              <th class="right">Tiền</th>
-            </tr>
-          </table>
-
-          <hr />
-
-          <div class="total" id="total">TỔNG: 0</div>
-
-          <p>Cảm ơn quý khách!</p>
+          <p class="save-status" id="saveStatus"></p>
         </div>
       </section>
     </main>
@@ -472,11 +590,6 @@
           const row = document.createElement("div");
           row.className = "menu-item";
 
-          const minusButton = document.createElement("button");
-          minusButton.type = "button";
-          minusButton.textContent = "-";
-          minusButton.addEventListener("click", () => removeQuick(item.name));
-
           const nameButton = document.createElement("button");
           nameButton.type = "button";
           nameButton.className = "menu-name";
@@ -486,14 +599,7 @@
             addQuick(item.name, item.price),
           );
 
-          const plusButton = document.createElement("button");
-          plusButton.type = "button";
-          plusButton.textContent = "+";
-          plusButton.addEventListener("click", () =>
-            addQuick(item.name, item.price),
-          );
-
-          row.append(minusButton, nameButton, plusButton);
+          row.appendChild(nameButton);
           list.appendChild(row);
         });
       }
@@ -509,6 +615,27 @@
 
         if (items[name].qty <= 0) {
           delete items[name];
+        }
+
+        render();
+      }
+
+      function increaseItem(name) {
+        if (!items[name]) return;
+
+        items[name].qty += 1;
+        render();
+      }
+
+      function updateItemQty(name, value) {
+        if (!items[name]) return;
+
+        const qty = parseInt(value);
+
+        if (!qty || qty <= 0) {
+          delete items[name];
+        } else {
+          items[name].qty = qty;
         }
 
         render();
@@ -540,6 +667,82 @@
       }
 
       function render() {
+        total = Object.values(items).reduce(
+          (sum, item) => sum + item.qty * item.price,
+          0,
+        );
+        renderCart();
+        renderBill();
+      }
+
+      function renderCart() {
+        const cartList = document.getElementById("cartList");
+        cartList.innerHTML = "";
+
+        const selectedItems = Object.entries(items);
+
+        if (!selectedItems.length) {
+          cartList.innerHTML = '<p class="empty-menu">Chưa có món nào</p>';
+          document.getElementById("cartTotal").innerText = "Tổng: 0";
+          return;
+        }
+
+        selectedItems.forEach(([name, item]) => {
+          const itemTotal = item.qty * item.price;
+          const row = document.createElement("div");
+          row.className = "cart-item";
+
+          const details = document.createElement("div");
+          details.className = "cart-details";
+          details.innerHTML = `
+            <div class="cart-name">${name}</div>
+            <div class="cart-meta">
+              ${item.price.toLocaleString()} x ${item.qty} = ${itemTotal.toLocaleString()}
+            </div>
+          `;
+
+          const controls = document.createElement("div");
+          controls.className = "cart-controls";
+
+          const minusButton = document.createElement("button");
+          minusButton.type = "button";
+          minusButton.textContent = "-";
+          minusButton.addEventListener("click", () => removeQuick(name));
+
+          const qty = document.createElement("div");
+          qty.className = "cart-qty";
+
+          const qtyInput = document.createElement("input");
+          qtyInput.type = "number";
+          qtyInput.min = "1";
+          qtyInput.value = item.qty;
+          qtyInput.addEventListener("change", () =>
+            updateItemQty(name, qtyInput.value),
+          );
+          qtyInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              updateItemQty(name, qtyInput.value);
+            }
+          });
+
+          qty.appendChild(qtyInput);
+
+          const plusButton = document.createElement("button");
+          plusButton.type = "button";
+          plusButton.textContent = "+";
+          plusButton.addEventListener("click", () => increaseItem(name));
+
+          controls.append(minusButton, qty, plusButton);
+          row.append(details, controls);
+
+          cartList.appendChild(row);
+        });
+
+        document.getElementById("cartTotal").innerText =
+          "Tổng: " + total.toLocaleString();
+      }
+
+      function renderBill() {
         const table = document.getElementById("items");
         table.innerHTML = `
           <colgroup>
@@ -556,12 +759,9 @@
           </tr>
         `;
 
-        total = 0;
-
         for (let name in items) {
           const item = items[name];
           const itemTotal = item.qty * item.price;
-          total += itemTotal;
 
           const row = table.insertRow();
           row.innerHTML = `

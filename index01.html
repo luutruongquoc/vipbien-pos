@@ -1,0 +1,155 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Mini POS</title>
+
+<style>
+body {
+  font-family: monospace;
+  max-width: 400px;
+  margin: auto;
+}
+
+/* FORM */
+input {
+  width: 100%;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+button {
+  margin: 5px 0;
+  padding: 8px;
+  width: 100%;
+}
+
+/* BILL */
+.bill {
+  width: 58mm;
+  font-size: 12px;
+}
+
+h2 {
+  text-align: center;
+  margin: 5px 0;
+}
+
+hr {
+  border-top: 1px dashed black;
+}
+
+table {
+  width: 100%;
+}
+
+td, th {
+  text-align: left;
+}
+
+.total {
+  text-align: right;
+  font-weight: bold;
+}
+
+.footer {
+  text-align: center;
+}
+
+/* IN */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .bill, .bill * {
+    visibility: visible;
+  }
+  .bill {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h3>Nhập món</h3>
+
+<input id="name" placeholder="Tên món">
+<input id="price" type="number" placeholder="Đơn giá">
+<input id="qty" type="number" placeholder="Số lượng">
+
+<button onclick="addItem()">➕ Thêm món</button>
+
+<hr>
+
+<div id="bill" class="bill">
+  <h2>VIP BIỂN</h2>
+  <p style="text-align:center">Q7, TP.HCM</p>
+
+  <hr>
+
+  <div id="items"></div>
+
+  <hr>
+
+  <div class="total" id="total">TỔNG: 0</div>
+
+  <p class="footer">Cảm ơn quý khách!</p>
+</div>
+
+<button onclick="printBill()">🖨 In bill</button>
+
+<script>
+let items = [];
+
+function addItem() {
+  const name = document.getElementById('name').value;
+  const price = parseInt(document.getElementById('price').value);
+  const qty = parseInt(document.getElementById('qty').value);
+
+  if (!name || !price || !qty) return;
+
+  items.push({ name, price, qty });
+  render();
+
+  document.getElementById('name').value = "";
+  document.getElementById('price').value = "";
+  document.getElementById('qty').value = "";
+}
+
+function render() {
+  let html = "<table>";
+
+  let total = 0;
+
+  items.forEach(item => {
+    const line = item.price * item.qty;
+    total += line;
+
+    html += `
+      <tr>
+        <td>${item.name}</td>
+        <td>${item.qty}</td>
+        <td>${line.toLocaleString()}</td>
+      </tr>
+    `;
+  });
+
+  html += "</table>";
+
+  document.getElementById("items").innerHTML = html;
+  document.getElementById("total").innerText = "TỔNG: " + total.toLocaleString();
+}
+
+function printBill() {
+  window.print();
+}
+</script>
+
+</body>
+</html>
+```

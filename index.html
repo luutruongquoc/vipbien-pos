@@ -37,6 +37,33 @@
         cursor: pointer;
       }
 
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 38px;
+        padding: 8px 24px;
+        background: #052a4d;
+        color: #fff;
+        font-size: 14px;
+      }
+
+      .topbar a {
+        color: #fff;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .topbar a:hover {
+        text-decoration: underline;
+      }
+
       .pos-layout {
         display: grid;
         grid-template-columns: minmax(240px, 1fr) minmax(320px, 1.25fr) minmax(
@@ -45,7 +72,7 @@
           );
         gap: 24px;
         min-height: 100vh;
-        padding: 24px;
+        padding: 62px 24px 24px;
       }
 
       /* ===== POS UI ===== */
@@ -440,6 +467,13 @@
   </head>
 
   <body>
+    <header class="topbar">
+      <div>Phần mềm bán hàng quán Vip Biển</div>
+      <a href="https://quoclt.asia" target="_blank" rel="noopener noreferrer">
+        Developed by Trường Quốc
+      </a>
+    </header>
+
     <main class="pos-layout">
       <section class="controls" aria-label="Nhập liệu bán hàng">
         <div class="panel form-group">
